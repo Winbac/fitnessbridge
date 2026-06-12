@@ -27,7 +27,7 @@ export default function WhyChooseUs() {
       <Container>
         <div className="grid items-center gap-1 lg:grid-cols-2">
         <div className="relative flex justify-center lg:justify-start">
-  <div className="relative lg:-ml-10">
+  <div className="relative lg:-ml-0">
     <Image
       src="/Image/group 1.png"
       alt="Personal trainer guiding gym member"
