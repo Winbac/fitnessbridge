@@ -1,5 +1,6 @@
 import { FaInstagram, FaFacebookF, FaYoutube, FaXTwitter } from "react-icons/fa6";
 import Container from "@/components/layout/Container";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -12,7 +13,6 @@ export default function Footer() {
 
             <ul className="space-y-4 text-sm text-[#D1D5DB]">
               <li>Gym Plans</li>
-              <li>Personal Training</li>
               <li>Yoga Classes</li>
               <li>Nutrition Guide</li>
               <li>Fitness App</li>
@@ -27,26 +27,56 @@ export default function Footer() {
               <li>The Fitness Bridge</li>
               <li>Sector 15</li>
               <li>Faridabad, Haryana</li>
-              <li>India</li>
-              <li>121007</li>
+              <li>India, 121007</li>
             </ul>
           </div>
 
           {/* Useful Links */}
-          <div>
-            <h3 className="mb-5 text-lg font-bold text-white">
-              Useful Links
-            </h3>
+        
+{/* Useful Links */}
+<div>
+  <h3 className="mb-5 text-lg font-bold text-white">
+    Useful Links
+  </h3>
 
-            <ul className="space-y-4 text-sm text-[#D1D5DB]">
-              <li>Home</li>
-              <li>Plans</li>
-              <li>Trainers</li>
-              <li>Shop</li>
-              <li>Contact Us</li>
-            </ul>
-          </div>
+  <ul className="space-y-4 text-sm text-[#D1D5DB]">
+    <li>
+      <Link
+        href="/"
+        className="transition hover:text-[#F97316]"
+      >
+        Home
+      </Link>
+    </li>
 
+    <li>
+      <Link
+        href="/#plans"
+        className="transition hover:text-[#F97316]"
+      >
+        Plans
+      </Link>
+    </li>
+
+    <li>
+      <Link
+        href="/shop"
+        className="transition hover:text-[#F97316]"
+      >
+        Shop
+      </Link>
+    </li>
+
+    <li>
+      <Link
+        href="/#contact"
+        className="transition hover:text-[#F97316]"
+      >
+        Contact Us
+      </Link>
+    </li>
+  </ul>
+</div>
           {/* Brand */}
           <div>
             <h3 className="mb-5 text-2xl font-bold text-[#F97316]">
@@ -59,19 +89,43 @@ export default function Footer() {
               achieve lasting results.
             </p>
 <div className="mt-6 flex gap-4">
-  <a className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#111827] text-[#F97316] hover:bg-[#F97316] hover:text-white">
+  <a
+    href="https://instagram.com"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Instagram"
+    className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#111827] text-[#F97316] transition hover:bg-[#F97316] hover:text-white"
+  >
     <FaInstagram size={18} />
   </a>
 
-  <a className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#111827] text-[#F97316] hover:bg-[#F97316] hover:text-white">
+  <a
+    href="https://facebook.com"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Facebook"
+    className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#111827] text-[#F97316] transition hover:bg-[#F97316] hover:text-white"
+  >
     <FaFacebookF size={18} />
   </a>
 
-  <a className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#111827] text-[#F97316] hover:bg-[#F97316] hover:text-white">
+  <a
+    href="https://x.com"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Twitter"
+    className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#111827] text-[#F97316] transition hover:bg-[#F97316] hover:text-white"
+  >
     <FaXTwitter size={18} />
   </a>
 
-  <a className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#111827] text-[#F97316] hover:bg-[#F97316] hover:text-white">
+  <a
+    href="https://youtube.com"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="YouTube"
+    className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#111827] text-[#F97316] transition hover:bg-[#F97316] hover:text-white"
+  >
     <FaYoutube size={18} />
   </a>
 </div>

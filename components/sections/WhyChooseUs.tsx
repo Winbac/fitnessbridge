@@ -60,15 +60,15 @@ export default function WhyChooseUs() {
                 const Icon = item.icon;
 
                 return (
-                  <div key={index} className="flex items-start gap-5">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/70 text-[#111827]">
-                      <Icon size={20} />
-                    </div>
+              <div key={index} className="flex items-start gap-4 lg:gap-5">
+  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/70 text-[#111827]">
+    <Icon size={20} />
+  </div>
 
-                    <p className="max-w-[580px] text-[13px] leading-relaxed text-[#D1D5DB]">
-                      {item.text}
-                    </p>
-                  </div>
+  <p className="flex-1 pr-4 text-[13px] leading-relaxed text-[#D1D5DB] sm:pr-0 lg:max-w-[580px]">
+    {item.text}
+  </p>
+</div>
                 );
               })}
             </div>
