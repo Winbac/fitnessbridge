@@ -45,7 +45,7 @@ const plans = [
 
 export default function Plans() {
   return (
-    <section className="bg-[#0F172A] py-4">
+    <section id="plans" className="bg-[#0F172A] py-4">
       <Container>
         <h2 className="mb-10 text-3xl font-bold text-white">
           <span className="mr-2 text-[#F97316]">|</span>

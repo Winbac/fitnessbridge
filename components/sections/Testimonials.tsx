@@ -25,7 +25,7 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className="bg-[#0F172A] py-16">
+    <section   id="testimonials" className="bg-[#0F172A] py-16">
       <Container>
              <h2 className="mb-10 text-3xl font-bold text-white">
           <span className="mr-2 text-[#F97316]">|</span>

@@ -3,7 +3,7 @@ import Container from "@/components/layout/Container";
 
 export default function ContactUs() {
   return (
-    <section className="bg-[#0F172A] py-8">
+    <section   id="contact"  className="bg-[#0F172A] py-8">
       <Container>
            <h2 className="mb-10 text-3xl font-bold text-white">
           <span className="mr-2 text-[#F97316]">|</span>
@@ -23,8 +23,8 @@ export default function ContactUs() {
               or fitness plans? Get in touch with our team today.
             </p>
 
-            <div className="mt-10 flex flex-col gap-8">
-              <div className="flex items-center gap-4">
+            <div className="mt-10 flex flex-col gap-4">
+              <div className="flex items-center gap-2">
                 <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#111827] text-[#F97316]">
                   <Phone size={20} />
                 </div>
@@ -36,7 +36,7 @@ export default function ContactUs() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
                 <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#111827] text-[#F97316]">
                   <Mail size={20} />
                 </div>
@@ -48,7 +48,7 @@ export default function ContactUs() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
                 <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#111827] text-[#F97316]">
                   <MapPin size={20} />
                 </div>
