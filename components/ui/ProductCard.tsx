@@ -19,7 +19,7 @@ export default function ProductCard({
   isNew,
 }: ProductCardProps) {
   return (
-    <div className="card rounded-[24px] border border-[#374151] bg-[#111827] p-6 transition duration-300 hover:-translate-y-2 hover:border-[#F97316]">
+    <div className="card relative rounded-[24px] border border-[#374151] bg-[#111827] p-6 shadow-lg shadow-black/30 transition duration-300 hover:-translate-y-2 hover:border-[#F97316] hover:shadow-[0_0_35px_rgba(249,115,22,0.25)]">
 
       {/* Badge */}
      {isNew && (
@@ -39,7 +39,7 @@ export default function ProductCard({
         />
       </figure>
 
-      <div className="card-body p-0 pt-6">
+      <div className="card-body p-0 pt-4">
         <h2 className="text-[24px] font-semibold text-white">
           {name}
         </h2>
@@ -48,7 +48,7 @@ export default function ProductCard({
           {description}
         </p>
 
-        <div className="mt-4 flex items-center justify-between">
+        <div className="mt-2 flex items-center justify-between">
           <span className="text-lg font-bold text-[#F97316]">
             {price}
           </span>
@@ -59,7 +59,7 @@ export default function ProductCard({
           </div>
         </div>
 
-        <button className="btn mt-6 w-full border-none bg-[#F97316] text-white hover:bg-[#EA580C]">
+        <button className="btn mt-2 w-full border-none bg-[#F97316] text-white hover:bg-[#EA580C]">
           Add to Cart
         </button>
       </div>

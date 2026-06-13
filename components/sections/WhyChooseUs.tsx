@@ -23,21 +23,32 @@ const features = [
 
 export default function WhyChooseUs() {
   return (
-    <section className="bg-[#0F172A]">
+    <section className="overflow-hidden bg-[#0F172A] py-20">
       <Container>
-        <div className="grid items-center gap-1 lg:grid-cols-2">
-        <div className="relative flex justify-center lg:justify-start">
-  <div className="relative lg:-ml-0">
-    <Image
-      src="/Image/group 1.png"
-      alt="Personal trainer guiding gym member"
-      width={560}
-      height={560}
-      className="h-[320px] w-[320px] object-contain lg:h-[380px] lg:w-[380px]"
-    />
-  </div>
-</div>
+        <div className="grid items-center gap-10 lg:grid-cols-2">
+          
+          {/* LEFT COLUMN */}
+          <div className="relative flex justify-center lg:justify-start">
+            <div className="relative h-[420px] w-[420px]">
+              
+              {/* Orange circle/ring background */}
+              <div className="absolute -left-44 -top-42 h-[430px] w-[430px] rounded-full border-[38px] border-[#F97316]" />
 
+              {/* Image placeholder */}
+              <div className="absolute left-0 top-12 h-[330px] w-[330px]">
+                {/* Add your image here later */}
+                <Image
+                  src="/Image/Group 1.png"
+                  alt="Gym trainer"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN */}
           <div>
             <h2 className="mb-8 text-2xl font-bold text-white lg:text-3xl">
               <span className="mr-3 text-[#F97316]">|</span>
@@ -62,6 +73,7 @@ export default function WhyChooseUs() {
               })}
             </div>
           </div>
+
         </div>
       </Container>
     </section>

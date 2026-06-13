@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function ShopEssentials() {
   return (
-    <section className="bg-[#0F172A] py-20">
+    <section className="bg-[#0F172A] py-4">
       
       <Container>
         <div className="mb-12">
