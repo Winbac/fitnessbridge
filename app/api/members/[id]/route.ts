@@ -8,27 +8,17 @@ export async function GET(
 ) {
   try {
     await connectDB();
-
     const { id } = await params;
 
     const member = await Member.findById(id).populate("plan");
 
     if (!member) {
-      return NextResponse.json(
-        { success: false, message: "Member not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, message: "Member not found" }, { status: 404 });
     }
 
-    return NextResponse.json({
-      success: true,
-      data: member,
-    });
+    return NextResponse.json({ success: true, data: member });
   } catch (error: any) {
-    return NextResponse.json(
-      { success: false, message: "Failed to fetch member", error: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, message: "Failed to fetch member", error: error.message }, { status: 500 });
   }
 }
 
@@ -38,7 +28,6 @@ export async function PUT(
 ) {
   try {
     await connectDB();
-
     const { id } = await params;
     const body = await request.json();
 
@@ -48,22 +37,12 @@ export async function PUT(
     }).populate("plan");
 
     if (!member) {
-      return NextResponse.json(
-        { success: false, message: "Member not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, message: "Member not found" }, { status: 404 });
     }
 
-    return NextResponse.json({
-      success: true,
-      message: "Member updated successfully",
-      data: member,
-    });
+    return NextResponse.json({ success: true, message: "Member updated successfully", data: member });
   } catch (error: any) {
-    return NextResponse.json(
-      { success: false, message: "Failed to update member", error: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, message: "Failed to update member", error: error.message }, { status: 500 });
   }
 }
 
@@ -73,26 +52,16 @@ export async function DELETE(
 ) {
   try {
     await connectDB();
-
     const { id } = await params;
 
     const member = await Member.findByIdAndDelete(id);
 
     if (!member) {
-      return NextResponse.json(
-        { success: false, message: "Member not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, message: "Member not found" }, { status: 404 });
     }
 
-    return NextResponse.json({
-      success: true,
-      message: "Member deleted successfully",
-    });
+    return NextResponse.json({ success: true, message: "Member deleted successfully" });
   } catch (error: any) {
-    return NextResponse.json(
-      { success: false, message: "Failed to delete member", error: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, message: "Failed to delete member", error: error.message }, { status: 500 });
   }
 }
