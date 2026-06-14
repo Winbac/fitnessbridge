@@ -1,6 +1,6 @@
 import { Schema, model, models } from "mongoose";
 
-const productSchema = new Schema(
+const planSchema = new Schema(
   {
     name: {
       type: String,
@@ -10,22 +10,18 @@ const productSchema = new Schema(
       type: Number,
       required: true,
     },
-    image: String,
-    description: String,
-    rating: {
-      type: Number,
-      default: 5,
+    duration: {
+      type: String,
+      default: "monthly",
     },
-    isNew: {
+    description: String,
+    features: [String],
+    isPopular: {
       type: Boolean,
       default: false,
-    },
-    stock: {
-      type: Number,
-      default: 0,
     },
   },
   { timestamps: true }
 );
 
-export default models.Product || model("Product", productSchema);
+export default models.Plan || model("Plan", planSchema);
