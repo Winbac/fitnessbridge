@@ -1,9 +1,8 @@
 "use client";
 
-import { Plus, Search, MoreHorizontal, TrendingUp } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { Pencil, Trash2 } from "lucide-react";
+import { Plus, Search, TrendingUp, Pencil, Trash2 } from "lucide-react";
 
 type Plan = {
   _id: string;
@@ -106,10 +105,14 @@ async function handleDelete(id: string) {
           </p>
         </div>
 
-        <button className="flex items-center gap-2 rounded-xl bg-[#F97316] px-5 py-3 font-semibold text-white hover:bg-[#EA580C]">
-          <Plus size={18} />
-          Add Member
-        </button>
+  <Link
+  href="/admin/members/create"
+  className="flex items-center gap-2 rounded-xl bg-[#F97316] px-5 py-3 font-semibold text-white hover:bg-[#EA580C]"
+>
+  <Plus size={18} />
+  Add Member
+</Link>
+
       </div>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
