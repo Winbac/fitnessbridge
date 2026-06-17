@@ -2,6 +2,8 @@
 
 import { Plus, Search, MoreHorizontal, TrendingUp } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { Pencil, Trash2 } from "lucide-react";
 
 type Plan = {
   _id: string;
@@ -57,6 +59,25 @@ export default function MembersPage() {
       setLoading(false);
     }
   }
+async function handleDelete(id: string) {
+  const confirmDelete = confirm(
+    "Are you sure you want to delete this member?"
+  );
+
+  if (!confirmDelete) return;
+
+  const res = await fetch(`/api/members/${id}`, {
+    method: "DELETE",
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    fetchMembers();
+  } else {
+    alert(data.message);
+  }
+}
 
   useEffect(() => {
     fetchMembers();
@@ -191,7 +212,21 @@ export default function MembersPage() {
 
                 <p className="text-[#9CA3AF]">{joinedDate}</p>
 
-                <MoreHorizontal className="text-[#9CA3AF]" size={22} />
+<div className="flex items-center gap-4">
+  <Link href={`/admin/members/edit/${member._id}`}>
+    <Pencil
+      size={18}
+      className="cursor-pointer text-[#F97316]"
+    />
+  </Link>
+
+  <button onClick={() => handleDelete(member._id)}>
+    <Trash2
+      size={18}
+      className="cursor-pointer text-red-500"
+    />
+  </button>
+</div>
               </div>
             );
           })
