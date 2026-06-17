@@ -1,61 +1,42 @@
 import Link from "next/link";
+import StatCard from "@/components/admin/StatCard";
+import PageHeader from "@/components/admin/PageHeader";
 
-const adminCards = [
-  {
-    title: "Products",
-    description: "Manage shop products, prices, stock and images.",
-    href: "/admin/products",
-  },
-  {
-    title: "Plans",
-    description: "Manage gym membership plans and pricing.",
-    href: "/admin/plans",
-  },
-  {
-    title: "Members",
-    description: "View and manage gym members.",
-    href: "/admin/members",
-  },
-  {
-    title: "Orders",
-    description: "Track product orders and payment status.",
-    href: "/admin/orders",
-  },
-  {
-    title: "Contacts",
-    description: "View contact enquiries from website visitors.",
-    href: "/admin/contacts",
-  },
+const cards = [
+  { title: "Products", href: "/admin/products", desc: "Manage shop products, prices, stock and images." },
+  { title: "Plans", href: "/admin/plans", desc: "Manage gym membership plans and pricing." },
+  { title: "Members", href: "/admin/members", desc: "View and manage gym members." },
+  { title: "Orders", href: "/admin/orders", desc: "Track product orders and payment status." },
+  { title: "Contacts", href: "/admin/contacts", desc: "View contact enquiries from website visitors." },
 ];
 
-export default function AdminDashboard() {
+export default function AdminPage() {
   return (
-    <main className="min-h-screen bg-[#0F172A] px-6 py-10 text-white">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-10">
-          <h1 className="text-3xl font-bold text-[#F97316]">
-            Fitness Bridge Admin
-          </h1>
-          <p className="mt-2 text-[#D1D5DB]">
-            Manage products, plans, members, orders and enquiries.
-          </p>
-        </div>
+    <div className="space-y-9">
+      <PageHeader
+        title="Fitness Bridge Admin"
+        description="Manage products, plans, members, orders and enquiries."
+      />
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {adminCards.map((card) => (
-            <Link
-              key={card.title}
-              href={card.href}
-              className="rounded-2xl border border-[#374151] bg-[#111827] p-6 transition hover:-translate-y-1 hover:border-[#F97316]"
-            >
-              <h2 className="text-xl font-bold">{card.title}</h2>
-              <p className="mt-3 text-sm leading-relaxed text-[#9CA3AF]">
-                {card.description}
-              </p>
-            </Link>
-          ))}
-        </div>
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+        <StatCard title="TOTAL MEMBERS" value="289" desc="+24 this month" />
+        <StatCard title="TOTAL PRODUCTS" value="24" desc="6 categories" />
+        <StatCard title="TOTAL ORDERS" value="8" desc="All time" />
+        <StatCard title="MONTHLY SALES" value="₹8,412" desc="+22% vs last month" />
       </div>
-    </main>
+
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {cards.map((card) => (
+          <Link
+            key={card.href}
+            href={card.href}
+            className="rounded-2xl border border-[#1F2937] bg-[#111827] p-7 transition hover:border-[#F97316]"
+          >
+            <h2 className="text-2xl font-bold text-white">{card.title}</h2>
+            <p className="mt-4 text-[#9CA3AF]">{card.desc}</p>
+          </Link>
+        ))}
+      </div>
+    </div>
   );
 }
