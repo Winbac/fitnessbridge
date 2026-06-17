@@ -3,8 +3,10 @@ import { connectDB } from "@/lib/mongodb";
 import Contact from "@/models/Contact";
 
 export async function GET(
-  request: Request,
+  _request: Request,
+
   { params }: { params: Promise<{ id: string }> }
+
 ) {
   try {
     await connectDB();
@@ -47,7 +49,8 @@ export async function PUT(
 }
 
 export async function DELETE(
-  request: Request,
+  _request: Request,
+  
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
