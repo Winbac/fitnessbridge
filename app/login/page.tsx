@@ -12,12 +12,29 @@ export default function AdminLoginPage() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    if (email === "admin@fitnessbridge.com" && password === "admin123") {
-      localStorage.setItem("fitness_admin_auth", "true");
-      router.push("/admin");
-    } else {
-      alert("Invalid email or password");
-    }
+ async function handleSubmit(e: React.FormEvent) {
+  e.preventDefault();
+
+  const res = await fetch("/api/auth/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email,
+      password,
+    }),
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    router.push("/admin");
+    router.refresh();
+  } else {
+    alert(data.message);
+  }
+}
   }
 
   return (
