@@ -3,10 +3,12 @@
 import {
   Calendar,
   Download,
-  MoreHorizontal,
+  Plus,
   Search,
   TrendingUp,
 } from "lucide-react";
+import Link from "next/link";
+import { Pencil, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 type Product = {
@@ -78,6 +80,22 @@ export default function OrdersPage() {
       setLoading(false);
     }
   }
+  async function handleDelete(id: string) {
+  const confirmDelete = confirm("Are you sure you want to delete this order?");
+  if (!confirmDelete) return;
+
+  const res = await fetch(`/api/orders/${id}`, {
+    method: "DELETE",
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    fetchOrders();
+  } else {
+    alert(data.message || "Failed to delete order");
+  }
+}
 
   useEffect(() => {
     fetchOrders();
@@ -116,6 +134,13 @@ export default function OrdersPage() {
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-3xl font-bold text-white">Orders</h1>
+          <Link
+  href="/admin/orders/create"
+  className="flex w-fit items-center gap-2 rounded-xl bg-[#F97316] px-5 py-3 font-semibold text-white hover:bg-[#EA580C]"
+>
+  <Plus size={18} />
+  New Order
+</Link>
           <p className="mt-2 text-[#9CA3AF]">
             Track and manage all product orders.
           </p>
@@ -244,7 +269,21 @@ export default function OrdersPage() {
                   {order.orderStatus}
                 </span>
 
-                <MoreHorizontal size={22} className="text-[#9CA3AF]" />
+<div className="flex items-center gap-4">
+  <Link href={`/admin/orders/edit/${order._id}`}>
+    <Pencil
+      size={18}
+      className="cursor-pointer text-[#9CA3AF] hover:text-[#F97316]"
+    />
+  </Link>
+
+  <button onClick={() => handleDelete(order._id)}>
+    <Trash2
+      size={18}
+      className="cursor-pointer text-[#9CA3AF] hover:text-rose-400"
+    />
+  </button>
+</div>
               </div>
             );
           })
