@@ -1,4 +1,5 @@
 import { Bell, Search } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Topbar() {
   return (
