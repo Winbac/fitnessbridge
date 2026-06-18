@@ -9,10 +9,7 @@ export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-
- async function handleSubmit(e: React.FormEvent) {
+async function handleSubmit(e: React.FormEvent) {
   e.preventDefault();
 
   const res = await fetch("/api/auth/login", {
@@ -20,10 +17,7 @@ export default function AdminLoginPage() {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      email,
-      password,
-    }),
+    body: JSON.stringify({ email, password }),
   });
 
   const data = await res.json();
@@ -32,10 +26,9 @@ export default function AdminLoginPage() {
     router.push("/admin");
     router.refresh();
   } else {
-    alert(data.message);
+    alert(data.message || "Invalid email or password");
   }
 }
-  }
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#0F172A] p-6">
