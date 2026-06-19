@@ -1,9 +1,28 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Order from "@/models/Order";
+import { verifyAdmin } from "@/lib/auth";
+
+function unauthorized() {
+  return NextResponse.json(
+    {
+      success: false,
+      message: "Unauthorized",
+    },
+    {
+      status: 401,
+    }
+  );
+}
 
 export async function GET() {
   try {
+    const admin = await verifyAdmin();
+
+    if (!admin) {
+      return unauthorized();
+    }
+
     await connectDB();
 
     const orders = await Order.find()
@@ -21,13 +40,21 @@ export async function GET() {
         message: "Failed to fetch orders",
         error: error.message,
       },
-      { status: 500 }
+      {
+        status: 500,
+      }
     );
   }
 }
 
 export async function POST(request: Request) {
   try {
+    const admin = await verifyAdmin();
+
+    if (!admin) {
+      return unauthorized();
+    }
+
     await connectDB();
 
     const body = await request.json();
@@ -40,7 +67,9 @@ export async function POST(request: Request) {
         message: "Order created successfully",
         data: order,
       },
-      { status: 201 }
+      {
+        status: 201,
+      }
     );
   } catch (error: any) {
     return NextResponse.json(
@@ -49,7 +78,9 @@ export async function POST(request: Request) {
         message: "Failed to create order",
         error: error.message,
       },
-      { status: 500 }
+      {
+        status: 500,
+      }
     );
   }
 }

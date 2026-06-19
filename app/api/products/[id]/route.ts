@@ -1,12 +1,31 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Product from "@/models/Product";
+import { verifyAdmin } from "@/lib/auth";
+
+function unauthorized() {
+  return NextResponse.json(
+    {
+      success: false,
+      message: "Unauthorized",
+    },
+    {
+      status: 401,
+    }
+  );
+}
 
 export async function GET(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> },
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const admin = await verifyAdmin();
+
+    if (!admin) {
+      return unauthorized();
+    }
+
     await connectDB();
 
     const { id } = await params;
@@ -16,7 +35,7 @@ export async function GET(
     if (!product) {
       return NextResponse.json(
         { success: false, message: "Product not found" },
-        { status: 404 },
+        { status: 404 }
       );
     }
 
@@ -31,16 +50,22 @@ export async function GET(
         message: "Failed to fetch product",
         error: error.message,
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
 
 export async function PUT(
   request: Request,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const admin = await verifyAdmin();
+
+    if (!admin) {
+      return unauthorized();
+    }
+
     await connectDB();
 
     const { id } = await params;
@@ -58,7 +83,7 @@ export async function PUT(
     if (!product) {
       return NextResponse.json(
         { success: false, message: "Product not found" },
-        { status: 404 },
+        { status: 404 }
       );
     }
 
@@ -74,16 +99,22 @@ export async function PUT(
         message: "Failed to update product",
         error: error.message,
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
 
 export async function DELETE(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> },
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const admin = await verifyAdmin();
+
+    if (!admin) {
+      return unauthorized();
+    }
+
     await connectDB();
 
     const { id } = await params;
@@ -96,7 +127,7 @@ export async function DELETE(
           success: false,
           message: "Product not found",
         },
-        { status: 404 },
+        { status: 404 }
       );
     }
 
@@ -112,7 +143,7 @@ export async function DELETE(
         message: "Failed to delete product",
         error: error.message,
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

@@ -1,12 +1,26 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Plan from "@/models/Plan";
+import { verifyAdmin } from "@/lib/auth";
+
+function unauthorized() {
+  return NextResponse.json(
+    { success: false, message: "Unauthorized" },
+    { status: 401 }
+  );
+}
 
 export async function GET(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const admin = await verifyAdmin();
+
+    if (!admin) {
+      return unauthorized();
+    }
+
     await connectDB();
 
     const { id } = await params;
@@ -26,7 +40,11 @@ export async function GET(
     });
   } catch (error: any) {
     return NextResponse.json(
-      { success: false, message: "Failed to fetch plan", error: error.message },
+      {
+        success: false,
+        message: "Failed to fetch plan",
+        error: error.message,
+      },
       { status: 500 }
     );
   }
@@ -37,6 +55,12 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const admin = await verifyAdmin();
+
+    if (!admin) {
+      return unauthorized();
+    }
+
     await connectDB();
 
     const { id } = await params;
@@ -61,17 +85,27 @@ export async function PUT(
     });
   } catch (error: any) {
     return NextResponse.json(
-      { success: false, message: "Failed to update plan", error: error.message },
+      {
+        success: false,
+        message: "Failed to update plan",
+        error: error.message,
+      },
       { status: 500 }
     );
   }
 }
 
 export async function DELETE(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const admin = await verifyAdmin();
+
+    if (!admin) {
+      return unauthorized();
+    }
+
     await connectDB();
 
     const { id } = await params;
@@ -91,7 +125,11 @@ export async function DELETE(
     });
   } catch (error: any) {
     return NextResponse.json(
-      { success: false, message: "Failed to delete plan", error: error.message },
+      {
+        success: false,
+        message: "Failed to delete plan",
+        error: error.message,
+      },
       { status: 500 }
     );
   }

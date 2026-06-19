@@ -1,9 +1,23 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Member from "@/models/Member";
+import { verifyAdmin } from "@/lib/auth";
+
+function unauthorized() {
+  return NextResponse.json(
+    { success: false, message: "Unauthorized" },
+    { status: 401 }
+  );
+}
 
 export async function GET() {
   try {
+    const admin = await verifyAdmin();
+
+    if (!admin) {
+      return unauthorized();
+    }
+
     await connectDB();
 
     const members = await Member.find()
@@ -28,6 +42,12 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const admin = await verifyAdmin();
+
+    if (!admin) {
+      return unauthorized();
+    }
+
     await connectDB();
 
     const body = await request.json();
@@ -53,4 +73,3 @@ export async function POST(request: Request) {
     );
   }
 }
-

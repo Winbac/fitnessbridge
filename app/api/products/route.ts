@@ -1,9 +1,19 @@
-import { NextResponse } from "next/server";
+import { verifyAdmin } from "@/lib/auth";
 import { connectDB } from "@/lib/mongodb";
 import Product from "@/models/Product";
+import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
+    const admin = await verifyAdmin();
+
+    if (!admin) {
+      return NextResponse.json(
+        { success: false, message: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
     await connectDB();
 
     const products = await Product.find().sort({ createdAt: -1 });
@@ -26,6 +36,15 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const admin = await verifyAdmin();
+
+    if (!admin) {
+      return NextResponse.json(
+        { success: false, message: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
     await connectDB();
 
     const body = await request.json();

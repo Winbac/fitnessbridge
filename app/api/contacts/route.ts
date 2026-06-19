@@ -1,9 +1,28 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Contact from "@/models/Contact";
+import { verifyAdmin } from "@/lib/auth";
+
+function unauthorized() {
+  return NextResponse.json(
+    {
+      success: false,
+      message: "Unauthorized",
+    },
+    {
+      status: 401,
+    }
+  );
+}
 
 export async function GET() {
   try {
+    const admin = await verifyAdmin();
+
+    if (!admin) {
+      return unauthorized();
+    }
+
     await connectDB();
 
     const contacts = await Contact.find().sort({ createdAt: -1 });
@@ -19,13 +38,21 @@ export async function GET() {
         message: "Failed to fetch contacts",
         error: error.message,
       },
-      { status: 500 }
+      {
+        status: 500,
+      }
     );
   }
 }
 
 export async function POST(request: Request) {
   try {
+    const admin = await verifyAdmin();
+
+    if (!admin) {
+      return unauthorized();
+    }
+
     await connectDB();
 
     const body = await request.json();
@@ -38,7 +65,9 @@ export async function POST(request: Request) {
         message: "Contact saved successfully",
         data: contact,
       },
-      { status: 201 }
+      {
+        status: 201,
+      }
     );
   } catch (error: any) {
     return NextResponse.json(
@@ -47,7 +76,9 @@ export async function POST(request: Request) {
         message: "Failed to save contact",
         error: error.message,
       },
-      { status: 500 }
+      {
+        status: 500,
+      }
     );
   }
 }
