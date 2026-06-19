@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-
+import Image from "next/image";
 import {
   Box,
   MoreHorizontal,
@@ -18,6 +18,7 @@ type Product = {
   price: number;
   stock: number;
   sales?: number;
+  image?: string;
 };
 
 function getStatus(stock: number) {
@@ -182,9 +183,19 @@ export default function ProductsPage() {
                 className="grid gap-4 border-b border-[#1F2937] p-5 last:border-b-0 lg:grid-cols-[1.6fr_0.9fr_0.7fr_0.7fr_0.9fr_0.7fr_40px] lg:items-center lg:px-6"
               >
                 <div className="flex items-center gap-4">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#171923] text-[#9CA3AF]">
-                    <Box size={18} />
-                  </div>
+                 <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl bg-[#171923] text-[#9CA3AF]">
+  {product.image ? (
+    <Image
+      src={product.image}
+      alt={product.name}
+      width={44}
+      height={44}
+      className="h-full w-full object-cover"
+    />
+  ) : (
+    <Box size={18} />
+  )}
+</div>
                   <h3 className="font-bold text-white">{product.name}</h3>
                 </div>
 

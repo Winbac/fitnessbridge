@@ -1,13 +1,17 @@
 "use client";
 
-import { ArrowLeft, Save } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import { ArrowLeft, Save } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 
 export default function CreateProductPage() {
   const router = useRouter();
+
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [image, setImage] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -15,14 +19,13 @@ export default function CreateProductPage() {
     price: "",
     stock: "",
     sales: "0",
-    image: "",
     description: "",
     rating: "5",
     isNew: false,
   });
 
   function handleChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
     const { name, value } = e.target;
 
@@ -32,19 +35,53 @@ export default function CreateProductPage() {
     }));
   }
 
-  function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleCheckbox(e: ChangeEvent<HTMLInputElement>) {
     setFormData((prev) => ({
       ...prev,
       isNew: e.target.checked,
     }));
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function uploadImage(file: File) {
+    try {
+      setUploading(true);
+
+      const uploadFormData = new FormData();
+      uploadFormData.append("file", file);
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: uploadFormData,
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setImage(data.url);
+      } else {
+        alert(data.message || "Image upload failed");
+      }
+    } catch (error) {
+      console.log("Upload error:", error);
+      alert("Image upload failed");
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (uploading) {
+      alert("Please wait, image is still uploading.");
+      return;
+    }
+
     setLoading(true);
 
     const payload = {
       ...formData,
+      image,
       price: Number(formData.price),
       stock: Number(formData.stock),
       sales: Number(formData.sales),
@@ -146,19 +183,42 @@ export default function CreateProductPage() {
           />
 
           <div className="md:col-span-2">
-            <Input
-              label="Image URL"
-              name="image"
-              value={formData.image}
-              onChange={handleChange}
-              placeholder="/Image/bottle-1.png"
+            <label className="mb-2 block text-sm font-semibold text-[#D1D5DB]">
+              Product Image
+            </label>
+
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                if (e.target.files?.[0]) {
+                  uploadImage(e.target.files[0]);
+                }
+              }}
+              className="block w-full rounded-xl border border-[#1F2937] bg-[#171923] p-3 text-white"
             />
+
+            {uploading && (
+              <p className="mt-3 text-[#F97316]">Uploading...</p>
+            )}
+
+            {image && (
+              <div className="mt-5">
+               <img
+  src={image}
+  alt="Product preview"
+  width={180}
+  height={180}
+/>
+              </div>
+            )}
           </div>
 
           <div className="md:col-span-2">
             <label className="mb-2 block text-sm font-semibold text-[#D1D5DB]">
               Description
             </label>
+
             <textarea
               name="description"
               value={formData.description}
@@ -190,7 +250,7 @@ export default function CreateProductPage() {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || uploading}
             className="flex items-center gap-2 rounded-xl bg-[#F97316] px-5 py-3 font-semibold text-white hover:bg-[#EA580C] disabled:opacity-60"
           >
             <Save size={18} />
@@ -222,6 +282,7 @@ function Input({
       <label className="mb-2 block text-sm font-semibold text-[#D1D5DB]">
         {label}
       </label>
+
       <input
         name={name}
         type={type}
