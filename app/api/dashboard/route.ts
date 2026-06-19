@@ -1,55 +1,54 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
-import Member from "@/models/Member";
 import Product from "@/models/Product";
+import Member from "@/models/Member";
 import Order from "@/models/Order";
 import Contact from "@/models/Contact";
-import Plan from "@/models/Plan";
+import { verifyAdmin } from "@/lib/auth";
 
 export async function GET() {
   try {
+    const admin = await verifyAdmin();
+
+    if (!admin) {
+      return NextResponse.json(
+        { success: false, message: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
     await connectDB();
 
-    const [
-      totalMembers,
-      activeMembers,
-      totalProducts,
-      totalOrders,
-      totalContacts,
-      totalPlans,
-      orders,
-    ] = await Promise.all([
-      Member.countDocuments(),
-      Member.countDocuments({ status: "ACTIVE" }),
-      Product.countDocuments(),
-      Order.countDocuments(),
-      Contact.countDocuments(),
-      Plan.countDocuments(),
-      Order.find({ orderStatus: { $ne: "CANCELLED" } }),
+    const [products, members, orders, contacts] = await Promise.all([
+      Product.find(),
+      Member.find(),
+      Order.find(),
+      Contact.find(),
     ]);
 
-    const totalRevenue = orders.reduce(
-      (sum, order) => sum + order.totalAmount,
+    const activeMembers = members.filter((m) => m.status === "ACTIVE").length;
+
+    const revenue = orders.reduce(
+      (sum, order) => sum + (order.totalAmount || 0),
       0
     );
 
     return NextResponse.json({
       success: true,
       data: {
-        totalMembers,
+        products: products.length,
+        members: members.length,
         activeMembers,
-        totalProducts,
-        totalOrders,
-        totalContacts,
-        totalPlans,
-        totalRevenue,
+        orders: orders.length,
+        revenue,
+        contacts: contacts.length,
       },
     });
   } catch (error: any) {
     return NextResponse.json(
       {
         success: false,
-        message: "Failed to fetch dashboard stats",
+        message: "Failed to fetch dashboard data",
         error: error.message,
       },
       { status: 500 }
