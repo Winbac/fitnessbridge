@@ -5,27 +5,53 @@ const productSchema = new Schema(
     name: {
       type: String,
       required: true,
+      trim: true,
     },
+
+    category: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
     price: {
       type: Number,
       required: true,
     },
-    image: String,
-    description: String,
+
+    stock: {
+      type: Number,
+      required: true,
+    },
+
+    sales: {
+      type: Number,
+      default: 0,
+    },
+
+    image: {
+      type: String,
+      default: "",
+    },
+
+    description: {
+      type: String,
+      default: "",
+    },
+
     rating: {
       type: Number,
       default: 5,
     },
-    isNew: {
+
+    isNewProduct: {
       type: Boolean,
       default: false,
     },
-    stock: {
-      type: Number,
-      default: 0,
-    },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 export default models.Product || model("Product", productSchema);

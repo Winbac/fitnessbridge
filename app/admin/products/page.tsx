@@ -46,6 +46,7 @@ export default function ProductsPage() {
 
       if (data.success) {
         setProducts(data.data);
+        console.log("Products from API:", data.data);
       }
     } catch (error) {
       console.log("Failed to fetch products", error);
@@ -159,7 +160,7 @@ export default function ProductsPage() {
           </div>
         </div>
 
-        <div className="hidden grid-cols-[1.6fr_0.9fr_0.7fr_0.7fr_0.9fr_0.7fr_40px] border-b border-[#1F2937] px-6 py-4 text-sm tracking-[0.15em] text-[#9CA3AF] lg:grid">
+        <div className="hidden grid-cols-[1.6fr_1fr_0.7fr_0.7fr_0.9fr_0.7fr_100px] border-b border-[#1F2937] px-6 py-4 text-sm tracking-[0.15em] text-[#9CA3AF] lg:grid">
           <span>PRODUCT</span>
           <span>CATEGORY</span>
           <span>PRICE</span>
@@ -180,7 +181,7 @@ export default function ProductsPage() {
             return (
               <div
                 key={product._id}
-                className="grid gap-4 border-b border-[#1F2937] p-5 last:border-b-0 lg:grid-cols-[1.6fr_0.9fr_0.7fr_0.7fr_0.9fr_0.7fr_40px] lg:items-center lg:px-6"
+                className="grid gap-4 border-b border-[#1F2937] p-5 last:border-b-0 lg:grid-cols-[1.6fr_1fr_0.7fr_0.7fr_0.9fr_0.7fr_100px] lg:items-center lg:px-6"
               >
                 <div className="flex items-center gap-4">
                  <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl bg-[#171923] text-[#9CA3AF]">
@@ -199,9 +200,9 @@ export default function ProductsPage() {
                   <h3 className="font-bold text-white">{product.name}</h3>
                 </div>
 
-                <span className="w-fit rounded-full bg-[#171923] px-3 py-1 text-[#9CA3AF]">
-                  {product.category}
-                </span>
+       <span className="w-fit rounded-full bg-[#171923] px-3 py-1 text-[#9CA3AF]">
+  {product.category ? product.category : "No Category"}
+</span>
 
                 <p className="font-bold text-white">₹{product.price}</p>
 
