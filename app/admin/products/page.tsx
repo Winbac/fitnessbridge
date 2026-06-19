@@ -56,21 +56,23 @@ export default function ProductsPage() {
   }
 
   async function handleDelete(id: string) {
-  const confirmDelete = confirm("Are you sure you want to delete this product?");
-  if (!confirmDelete) return;
+    const confirmDelete = confirm(
+      "Are you sure you want to delete this product?",
+    );
+    if (!confirmDelete) return;
 
-  const res = await fetch(`/api/products/${id}`, {
-    method: "DELETE",
-  });
+    const res = await fetch(`/api/products/${id}`, {
+      method: "DELETE",
+    });
 
-  const data = await res.json();
+    const data = await res.json();
 
-  if (data.success) {
-    fetchProducts();
-  } else {
-    alert(data.message || "Failed to delete product");
+    if (data.success) {
+      fetchProducts();
+    } else {
+      alert(data.message || "Failed to delete product");
+    }
   }
-}
 
   useEffect(() => {
     fetchProducts();
@@ -78,7 +80,7 @@ export default function ProductsPage() {
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) =>
-      product.name.toLowerCase().includes(search.toLowerCase())
+      product.name.toLowerCase().includes(search.toLowerCase()),
     );
   }, [products, search]);
 
@@ -87,7 +89,7 @@ export default function ProductsPage() {
   const lowStock = products.filter((p) => p.stock > 0 && p.stock <= 20).length;
   const monthlySales = products.reduce(
     (total, product) => total + product.price * (product.sales || 0),
-    0
+    0,
   );
 
   return (
@@ -99,14 +101,13 @@ export default function ProductsPage() {
             Manage your store inventory and listings.
           </p>
         </div>
-<Link
-  href="/admin/products/create"
-  className="flex items-center gap-2 rounded-xl bg-[#F97316] px-5 py-3 font-semibold text-white hover:bg-[#EA580C]"
->
-  <Plus size={18} />
-  Add Product
-</Link>
-
+        <Link
+          href="/admin/products/create"
+          className="flex items-center gap-2 rounded-xl bg-[#F97316] px-5 py-3 font-semibold text-white hover:bg-[#EA580C]"
+        >
+          <Plus size={18} />
+          Add Product
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
@@ -160,14 +161,19 @@ export default function ProductsPage() {
           </div>
         </div>
 
-        <div className="hidden grid-cols-[1.6fr_1fr_0.7fr_0.7fr_0.9fr_0.7fr_100px] border-b border-[#1F2937] px-6 py-4 text-sm tracking-[0.15em] text-[#9CA3AF] lg:grid">
+        <div
+          className="grid border-b border-[#1F2937] px-6 py-4 text-sm tracking-[0.15em] text-[#9CA3AF]"
+          style={{
+            gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr 1fr 120px",
+          }}
+        >
           <span>PRODUCT</span>
           <span>CATEGORY</span>
           <span>PRICE</span>
           <span>STOCK</span>
           <span>STATUS</span>
           <span>SALES</span>
-          <span></span>
+          <span>ACTIONS</span>
         </div>
 
         {loading ? (
@@ -180,29 +186,32 @@ export default function ProductsPage() {
 
             return (
               <div
-                key={product._id}
-                className="grid gap-4 border-b border-[#1F2937] p-5 last:border-b-0 lg:grid-cols-[1.6fr_1fr_0.7fr_0.7fr_0.9fr_0.7fr_100px] lg:items-center lg:px-6"
+            key={product._id}
+  className="grid items-center border-b border-[#1F2937] px-6 py-5 last:border-b-0"
+  style={{
+    gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr 1fr 120px",
+  }}
               >
                 <div className="flex items-center gap-4">
-                 <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl bg-[#171923] text-[#9CA3AF]">
-  {product.image ? (
-    <Image
-      src={product.image}
-      alt={product.name}
-      width={44}
-      height={44}
-      className="h-full w-full object-cover"
-    />
-  ) : (
-    <Box size={18} />
-  )}
-</div>
+                  <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl bg-[#171923] text-[#9CA3AF]">
+                    {product.image ? (
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        width={44}
+                        height={44}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <Box size={18} />
+                    )}
+                  </div>
                   <h3 className="font-bold text-white">{product.name}</h3>
                 </div>
 
-       <span className="w-fit rounded-full bg-[#171923] px-3 py-1 text-[#9CA3AF]">
-  {product.category ? product.category : "No Category"}
-</span>
+                <span className="w-fit rounded-full bg-[#171923] px-3 py-1 text-[#9CA3AF]">
+                  {product.category ? product.category : "No Category"}
+                </span>
 
                 <p className="font-bold text-white">₹{product.price}</p>
 
@@ -216,21 +225,21 @@ export default function ProductsPage() {
 
                 <p className="text-[#9CA3AF]">{product.sales || 0} sold</p>
 
-<div className="flex items-center gap-3">
-  <Link
-    href={`/admin/products/edit/${product._id}`}
-    className="text-sm font-semibold text-[#F97316] hover:text-[#EA580C]"
-  >
-    Edit
-  </Link>
+                <div className="flex items-center gap-3">
+                  <Link
+                    href={`/admin/products/edit/${product._id}`}
+                    className="text-sm font-semibold text-[#F97316] hover:text-[#EA580C]"
+                  >
+                    Edit
+                  </Link>
 
-  <button
-    onClick={() => handleDelete(product._id)}
-    className="text-sm font-semibold text-rose-400 hover:text-rose-300"
-  >
-    Delete
-  </button>
-</div>
+                  <button
+                    onClick={() => handleDelete(product._id)}
+                    className="text-sm font-semibold text-rose-400 hover:text-rose-300"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             );
           })
