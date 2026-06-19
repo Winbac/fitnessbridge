@@ -3,7 +3,6 @@
 import {
   Bar,
   BarChart,
-  CartesianGrid,
   Cell,
   Pie,
   PieChart,
@@ -37,73 +36,73 @@ export default function DashboardCharts({
     { name: "Contacts", value: contacts },
   ];
 
-  const revenueData = [
-    { name: "Revenue", value: revenue },
-    { name: "Orders", value: orders },
-    { name: "Products", value: products },
-    { name: "Members", value: members },
-  ];
-
   const memberData = [
     { name: "Active", value: activeMembers },
     { name: "Inactive", value: Math.max(members - activeMembers, 0) },
   ];
 
+  const revenueData = [
+    { name: "Revenue", value: revenue },
+    { name: "Orders", value: orders },
+    { name: "Products", value: products },
+  ];
+
   return (
     <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-      <div className="rounded-2xl border border-[#1F2937] bg-[#111827] p-6">
-        <h2 className="mb-6 text-xl font-bold text-white">Business Overview</h2>
+      <ChartCard title="Business Overview">
+        <BarChart data={overviewData}>
+          <XAxis dataKey="name" stroke="#9CA3AF" />
+          <YAxis stroke="#9CA3AF" />
+          <Tooltip />
+          <Bar dataKey="value" fill="#F97316" radius={[8, 8, 0, 0]} />
+        </BarChart>
+      </ChartCard>
 
-        <div className="h-[320px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={overviewData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1F2937" />
-              <XAxis dataKey="name" stroke="#9CA3AF" />
-              <YAxis stroke="#9CA3AF" />
-              <Tooltip />
-              <Bar dataKey="value" fill="#F97316" radius={[8, 8, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+      <ChartCard title="Member Status">
+        <PieChart>
+          <Pie
+            data={memberData}
+            dataKey="value"
+            nameKey="name"
+            innerRadius={70}
+            outerRadius={110}
+          >
+            <Cell fill="#22C55E" />
+            <Cell fill="#EF4444" />
+          </Pie>
+          <Tooltip />
+        </PieChart>
+      </ChartCard>
+
+      <div className="xl:col-span-2">
+        <ChartCard title="Revenue Analytics">
+          <BarChart data={revenueData}>
+            <XAxis dataKey="name" stroke="#9CA3AF" />
+            <YAxis stroke="#9CA3AF" />
+            <Tooltip />
+            <Bar dataKey="value" fill="#F97316" radius={[8, 8, 0, 0]} />
+          </BarChart>
+        </ChartCard>
       </div>
+    </div>
+  );
+}
 
-      <div className="rounded-2xl border border-[#1F2937] bg-[#111827] p-6">
-        <h2 className="mb-6 text-xl font-bold text-white">Member Status</h2>
+function ChartCard({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactElement;
+}) {
+  return (
+    <div className="rounded-2xl border border-[#1F2937] bg-[#111827] p-6">
+      <h2 className="mb-6 text-xl font-bold text-white">{title}</h2>
 
-        <div className="h-[320px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={memberData}
-                dataKey="value"
-                nameKey="name"
-                innerRadius={70}
-                outerRadius={110}
-                paddingAngle={5}
-              >
-                <Cell fill="#22C55E" />
-                <Cell fill="#EF4444" />
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-
-      <div className="rounded-2xl border border-[#1F2937] bg-[#111827] p-6 xl:col-span-2">
-        <h2 className="mb-6 text-xl font-bold text-white">Revenue Analytics</h2>
-
-        <div className="h-[320px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={revenueData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1F2937" />
-              <XAxis dataKey="name" stroke="#9CA3AF" />
-              <YAxis stroke="#9CA3AF" />
-              <Tooltip />
-              <Bar dataKey="value" fill="#F97316" radius={[8, 8, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+      <div style={{ width: "100%", height: "320px" }}>
+        <ResponsiveContainer width="100%" height="100%">
+          {children}
+        </ResponsiveContainer>
       </div>
     </div>
   );
