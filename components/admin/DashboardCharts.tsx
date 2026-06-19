@@ -88,7 +88,7 @@ export default function DashboardCharts({
   );
 }
 
-function ChartCard({
+ function ChartCard({
   title,
   children,
 }: {
