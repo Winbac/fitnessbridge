@@ -2,7 +2,11 @@ import { Schema, model, models } from "mongoose";
 
 const adminSchema = new Schema(
   {
-    name: { type: String, required: true, trim: true },
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
 
     email: {
       type: String,
@@ -12,7 +16,15 @@ const adminSchema = new Schema(
       trim: true,
     },
 
-    password: { type: String, required: true },
+    password: {
+      type: String,
+      required: true,
+    },
+
+    profileImage: {
+      type: String,
+      default: "",
+    },
 
     role: {
       type: String,
@@ -20,7 +32,9 @@ const adminSchema = new Schema(
       default: "ADMIN",
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 export default models.Admin || model("Admin", adminSchema);

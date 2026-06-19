@@ -2,18 +2,41 @@
 
 import { useRouter } from "next/navigation";
 import { Bell, Search } from "lucide-react";
+import { useState } from "react";
 
 export default function Topbar() {
+const [profileImage, setProfileImage] = useState("");
+const [uploading, setUploading] = useState(false);  const router = useRouter();
 
-  const router = useRouter();
+  async function handleLogout() {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.push("/login");
+    router.refresh();
+  }
 
-async function handleLogout() {
-  await fetch("/api/auth/logout", {
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  setUploading(true);
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const res = await fetch("/api/upload", {
     method: "POST",
+    body: formData,
   });
 
-  router.push("/login");
-  router.refresh();
+  const data = await res.json();
+
+  setUploading(false);
+
+  if (data.success) {
+    setProfileImage(data.imageUrl);
+  } else {
+    alert(data.message || "Upload failed");
+  }
 }
 
   return (
@@ -28,15 +51,43 @@ async function handleLogout() {
 
       <div className="ml-4 flex items-center gap-4">
         <Bell size={20} className="text-[#9CA3AF]" />
-        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#431407] font-bold text-[#F97316]">
-          AD
-        </div>
+
+        {/* Avatar triggers hidden input */}
+      <label className="cursor-pointer">
+  <input
+    type="file"
+    accept="image/*"
+    onChange={handleImageUpload}
+    className="hidden"
+  />
+
+  {profileImage ? (
+    <img
+      src={profileImage}
+      alt="Admin"
+      className="h-11 w-11 rounded-full object-cover"
+    />
+  ) : (
+    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#F97316] font-bold text-white">
+      AD
+    </div>
+  )}
+</label>
+        {/* Hidden file input */}
+        <input
+          id="imageUploadInput"
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleImageUpload}
+        />
+
         <button
-  onClick={handleLogout}
-  className="rounded-xl bg-[#171923] px-4 py-2 font-semibold text-white hover:bg-[#1F2937]"
->
-  Logout
-</button>
+          onClick={handleLogout}
+          className="rounded-xl bg-[#171923] px-4 py-2 font-semibold text-white hover:bg-[#1F2937]"
+        >
+          Logout
+        </button>
       </div>
     </header>
   );

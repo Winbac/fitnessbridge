@@ -1,12 +1,7 @@
 import { NextResponse } from "next/server";
-import { v2 as cloudinary } from "cloudinary";
+import cloudinary from "@/lib/cloudinary";
 import { verifyAdmin } from "@/lib/auth";
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+import type { UploadApiResponse, UploadApiErrorResponse } from "cloudinary";
 
 export async function POST(request: Request) {
   try {
@@ -20,7 +15,7 @@ export async function POST(request: Request) {
     }
 
     const formData = await request.formData();
-    const file = formData.get("file") as File;
+    const file = formData.get("file") as File | null;
 
     if (!file) {
       return NextResponse.json(
@@ -32,15 +27,20 @@ export async function POST(request: Request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    const result: any = await new Promise((resolve, reject) => {
+    const result = await new Promise<UploadApiResponse>((resolve, reject) => {
       cloudinary.uploader
         .upload_stream(
           {
             folder: "fitnessbridge/products",
+            resource_type: "image",
           },
-          (error, result) => {
+          (
+            error: UploadApiErrorResponse | undefined,
+            result: UploadApiResponse | undefined
+          ) => {
             if (error) reject(error);
-            else resolve(result);
+            else if (result) resolve(result);
+            else reject(new Error("Cloudinary upload failed"));
           }
         )
         .end(buffer);
@@ -48,14 +48,14 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      url: result.secure_url,
+      imageUrl: result.secure_url,
       publicId: result.public_id,
     });
   } catch (error: any) {
     return NextResponse.json(
       {
         success: false,
-        message: "Upload failed",
+        message: "Image upload failed",
         error: error.message,
       },
       { status: 500 }
