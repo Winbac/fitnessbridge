@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { Plus, Search, TrendingUp, Pencil, Trash2 } from "lucide-react";
+import { toast } from "react-hot-toast"; 
 
 type Plan = {
   _id: string;
@@ -60,7 +61,8 @@ export default function MembersPage() {
   }
 async function handleDelete(id: string) {
   const confirmDelete = confirm(
-    "Are you sure you want to delete this member?"
+    "Are you sure you want to delete this member?",
+
   );
 
   if (!confirmDelete) return;
@@ -238,3 +240,7 @@ async function handleDelete(id: string) {
     </div>
   );
 }
+
+
+
+

@@ -66,11 +66,14 @@ export default function OrdersPage() {
   const [activeTab, setActiveTab] = useState("ALL");
   const [loading, setLoading] = useState(true);
 
+  // ✅ Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
   async function fetchOrders() {
     try {
       const res = await fetch("/api/orders", { cache: "no-store" });
       const data = await res.json();
-
       if (data.success) {
         setOrders(data.data);
       }
@@ -80,39 +83,49 @@ export default function OrdersPage() {
       setLoading(false);
     }
   }
+
   async function handleDelete(id: string) {
-  const confirmDelete = confirm("Are you sure you want to delete this order?");
-  if (!confirmDelete) return;
+    const confirmDelete = confirm("Are you sure you want to delete this order?");
+    if (!confirmDelete) return;
 
-  const res = await fetch(`/api/orders/${id}`, {
-    method: "DELETE",
-  });
+    const res = await fetch(`/api/orders/${id}`, { method: "DELETE" });
+    const data = await res.json();
 
-  const data = await res.json();
-
-  if (data.success) {
-    fetchOrders();
-  } else {
-    alert(data.message || "Failed to delete order");
+    if (data.success) {
+      fetchOrders();
+    } else {
+      alert(data.message || "Failed to delete order");
+    }
   }
-}
 
   useEffect(() => {
     fetchOrders();
   }, []);
 
+  // ✅ Filter orders by search and tab
   const filteredOrders = useMemo(() => {
     return orders.filter((order) => {
       const matchesSearch =
         order.customerName.toLowerCase().includes(search.toLowerCase()) ||
         order._id.toLowerCase().includes(search.toLowerCase());
 
-      const matchesTab =
-        activeTab === "ALL" || order.orderStatus === activeTab;
+      const matchesTab = activeTab === "ALL" || order.orderStatus === activeTab;
 
       return matchesSearch && matchesTab;
     });
   }, [orders, search, activeTab]);
+
+  // ✅ Reset page to 1 when search or tab changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, activeTab]);
+
+  // ✅ Paginate AFTER filtering
+  const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+  const paginatedOrders = filteredOrders.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const totalOrders = orders.length;
   const revenue = orders.reduce((total, order) => {
@@ -135,12 +148,12 @@ export default function OrdersPage() {
         <div>
           <h1 className="text-3xl font-bold text-white">Orders</h1>
           <Link
-  href="/admin/orders/create"
-  className="flex w-fit items-center gap-2 rounded-xl bg-[#F97316] px-5 py-3 font-semibold text-white hover:bg-[#EA580C]"
->
-  <Plus size={18} />
-  New Order
-</Link>
+            href="/admin/orders/create"
+            className="flex w-fit items-center gap-2 rounded-xl bg-[#F97316] px-5 py-3 font-semibold text-white hover:bg-[#EA580C]"
+          >
+            <Plus size={18} />
+            New Order
+          </Link>
           <p className="mt-2 text-[#9CA3AF]">
             Track and manage all product orders.
           </p>
@@ -154,20 +167,17 @@ export default function OrdersPage() {
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
         <Stat title="TOTAL ORDERS" value={String(totalOrders)} desc="All time" />
-
         <Stat
           title="REVENUE"
           value={`₹${revenue.toLocaleString()}`}
           desc="Live from orders"
           positive
         />
-
         <Stat
           title="IN TRANSIT"
           value={String(inTransit)}
           desc="Processing + Shipped"
         />
-
         <Stat
           title="CANCELLED"
           value={String(cancelled)}
@@ -200,7 +210,10 @@ export default function OrdersPage() {
             <input
               placeholder="Search orders..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setCurrentPage(1); // ✅ Reset page when searching
+              }}
               className="w-full bg-transparent outline-none"
             />
           </div>
@@ -218,10 +231,10 @@ export default function OrdersPage() {
 
         {loading ? (
           <p className="p-6 text-[#9CA3AF]">Loading orders...</p>
-        ) : filteredOrders.length === 0 ? (
+        ) : paginatedOrders.length === 0 ? (
           <p className="p-6 text-[#9CA3AF]">No orders found.</p>
         ) : (
-          filteredOrders.map((order) => {
+          paginatedOrders.map((order) => {
             const firstProduct = order.products?.[0]?.productId;
             const date = new Date(order.createdAt).toLocaleDateString("en-IN", {
               day: "2-digit",
@@ -269,36 +282,41 @@ export default function OrdersPage() {
                   {order.orderStatus}
                 </span>
 
-<div className="flex items-center gap-4">
-  <Link href={`/admin/orders/edit/${order._id}`}>
-    <Pencil
-      size={18}
-      className="cursor-pointer text-[#9CA3AF] hover:text-[#F97316]"
-    />
-  </Link>
+                <div className="flex items-center gap-4">
+                  <Link href={`/admin/orders/edit/${order._id}`}>
+                    <Pencil
+                      size={18}
+                      className="cursor-pointer text-[#9CA3AF] hover:text-[#F97316]"
+                    />
+                  </Link>
 
-  <button onClick={() => handleDelete(order._id)}>
-    <Trash2
-      size={18}
-      className="cursor-pointer text-[#9CA3AF] hover:text-rose-400"
-    />
-  </button>
-</div>
+                  <button onClick={() => handleDelete(order._id)}>
+                    <Trash2
+                      size={18}
+                      className="cursor-pointer text-[#9CA3AF] hover:text-rose-400"
+                    />
+                  </button>
+                </div>
               </div>
             );
           })
         )}
 
-        <div className="flex items-center justify-between p-5 text-[#9CA3AF]">
-          <p>{filteredOrders.length} orders</p>
-
-          <div className="flex items-center gap-3">
-            <button className="rounded-lg bg-[#F97316] px-4 py-2 font-bold text-white">
-              1
+        {/* ✅ Pagination Controls */}
+        <div className="flex justify-center gap-2 mt-4 p-5">
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`px-3 py-1 rounded ${
+                currentPage === i + 1
+                  ? "bg-[#F97316] text-white"
+                  : "bg-[#171923] text-[#9CA3AF] hover:text-white"
+              }`}
+            >
+              {i + 1}
             </button>
-            <button>2</button>
-            <button>3</button>
-          </div>
+          ))}
         </div>
       </div>
     </div>

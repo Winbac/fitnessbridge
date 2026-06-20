@@ -4,6 +4,7 @@ import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function CreatePlanPage() {
   const router = useRouter();
@@ -53,9 +54,10 @@ export default function CreatePlanPage() {
 
     if (data.success) {
       router.push("/admin/plans");
+      toast.success("Plan created successfully!");
       router.refresh();
     } else {
-      alert(data.message || "Failed to create plan");
+      toast.error(data.message || "Failed to create plan");
     }
   }
 

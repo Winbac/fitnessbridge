@@ -4,6 +4,7 @@ import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast"; 
 
 type Plan = {
   _id: string;
@@ -69,8 +70,10 @@ export default function EditMemberPage() {
           });
         }
       } catch (error) {
-        console.log("Failed to load member", error);
-      } finally {
+  console.error(error);
+  toast.error("Failed to load member");
+}
+ finally {
         setFetching(false);
       }
     }
@@ -85,10 +88,11 @@ export default function EditMemberPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
+async function handleSubmit(e: React.FormEvent) {
+  e.preventDefault();
+  setLoading(true);
 
+  try {
     const payload = {
       ...formData,
       age: Number(formData.age),
@@ -96,21 +100,31 @@ export default function EditMemberPage() {
 
     const res = await fetch(`/api/members/${id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(payload),
     });
 
     const data = await res.json();
-    setLoading(false);
 
     if (data.success) {
-      router.push("/admin/members");
-      router.refresh();
-    } else {
-      alert(data.message || "Failed to update member");
-    }
-  }
+      toast.success("Member updated successfully!");
 
+      setTimeout(() => {
+        router.push("/admin/members");
+        router.refresh();
+      }, 1000);
+    } else {
+      toast.error(data.message || "Failed to update member");
+    }
+  } catch (error) {
+    console.error(error);
+    toast.error("Something went wrong");
+  } finally {
+    setLoading(false);
+  }
+}
   if (fetching) {
     return <p className="text-[#9CA3AF]">Loading member...</p>;
   }

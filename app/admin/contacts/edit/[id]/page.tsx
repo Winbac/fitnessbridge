@@ -4,6 +4,7 @@ import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function EditContactPage() {
   const router = useRouter();
@@ -81,9 +82,10 @@ export default function EditContactPage() {
 
     if (data.success) {
       router.push("/admin/contacts");
+      toast.success("Contact updated successfully!");
       router.refresh();
     } else {
-      alert(data.message || "Failed to update contact");
+      toast.error(data.message || "Failed to update contact");
     }
   }
 

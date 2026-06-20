@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { Plus, Pencil, Trash2, Check, TrendingUp } from "lucide-react";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 type Plan = {
   _id: string;
@@ -46,9 +47,10 @@ export default function PlansPage() {
   const data = await res.json();
 
   if (data.success) {
+    toast.success("Plan deleted successfully!");
     fetchPlans();
   } else {
-    alert(data.message);
+    toast.error(data.message || "Failed to delete plan");
   }
 }
 

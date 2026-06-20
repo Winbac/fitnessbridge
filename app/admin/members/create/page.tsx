@@ -4,6 +4,7 @@ import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 type Plan = {
   _id: string;
@@ -70,9 +71,12 @@ export default function CreateMemberPage() {
 
     if (data.success) {
       router.push("/admin/members");
+            toast.success("Member created successfully!");
+
+
       router.refresh();
     } else {
-      alert(data.message || "Failed to create member");
+      toast.error(data.message || "Failed to create member");
     }
   }
 

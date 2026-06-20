@@ -1,5 +1,5 @@
 "use client";
-
+import toast from "react-hot-toast";
 import { ArrowLeft, Save } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -36,6 +36,7 @@ export default function CreateOrderPage() {
       const data = await res.json();
 
       if (data.success) {
+        
         setProducts(data.data);
       }
     }
@@ -66,10 +67,11 @@ export default function CreateOrderPage() {
     }));
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
+async function handleSubmit(e: React.FormEvent) {
+  e.preventDefault();
+  setLoading(true);
 
+  try {
     const quantity = Number(formData.quantity);
     const price = Number(formData.price);
     const totalAmount = quantity * price;
@@ -101,15 +103,24 @@ export default function CreateOrderPage() {
     });
 
     const data = await res.json();
-    setLoading(false);
 
     if (data.success) {
-      router.push("/admin/orders");
-      router.refresh();
+      toast.success("Order created successfully!");
+
+      setTimeout(() => {
+        router.push("/admin/orders");
+        router.refresh();
+      }, 1000);
     } else {
-      alert(data.message || "Failed to create order");
+      toast.error(data.message || "Failed to create order");
     }
+  } catch (error) {
+    console.error(error);
+    toast.error("Something went wrong");
+  } finally {
+    setLoading(false);
   }
+}
 
   const totalAmount = Number(formData.quantity || 0) * Number(formData.price || 0);
 
@@ -250,4 +261,4 @@ function Select({ label, name, value, onChange, children }: any) {
       </select>
     </div>
   );
-}
+} 

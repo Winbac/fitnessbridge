@@ -1,5 +1,6 @@
 "use client";
-
+import Link from "next/link";
+import toast from "react-hot-toast";
 import {
   Mail,
   Phone,
@@ -52,6 +53,35 @@ export default function ContactsPage() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
 
+  async function handleDelete(id: string) {
+  const confirmDelete = confirm(
+    "Are you sure you want to delete this contact?"
+  );
+
+  if (!confirmDelete) return;
+
+  try {
+    const res = await fetch(`/api/contacts/${id}`, {
+      method: "DELETE",
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      toast.success("Contact deleted successfully");
+
+      fetchContacts();
+
+      setSelectedContact(null);
+    } else {
+      toast.error(data.message || "Delete failed");
+    }
+  } catch (error) {
+    console.error(error);
+    toast.error("Something went wrong");
+  }
+}
+
   async function fetchContacts() {
     try {
       const res = await fetch("/api/contacts", { cache: "no-store" });
@@ -73,6 +103,7 @@ export default function ContactsPage() {
   }, []);
 
   const filteredContacts = useMemo(() => {
+
     return contacts.filter((contact) =>
       contact.name.toLowerCase().includes(search.toLowerCase())
     );
@@ -205,10 +236,22 @@ export default function ContactsPage() {
                   </div>
                 </div>
 
-                <div className="flex gap-4 text-[#9CA3AF]">
-                  <Pencil size={20} />
-                  <Trash2 size={20} />
-                </div>
+               <div className="flex items-center gap-4">
+  <Link
+    href={`/admin/contacts/edit/${selectedContact._id}`}
+    className="text-[#F97316] hover:text-[#EA580C]"
+  >
+    <Pencil size={20} />
+  </Link>
+
+  <button
+    onClick={() => handleDelete(selectedContact._id)}
+    className="text-rose-400 hover:text-rose-300"
+  >
+    <Trash2 size={20} />
+  </button>
+</div>
+
               </div>
 
               <div className="space-y-6 p-6">

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import StatCard from "@/components/admin/StatCard";
 import PageHeader from "@/components/admin/PageHeader";
 import DashboardCharts from "@/components/admin/DashboardCharts";
+import StatCardSkeleton from "@/components/admin/StatCardSkeleton";
 
 const cards = [
   {
@@ -68,10 +69,6 @@ export default function AdminPage() {
     fetchDashboardData();
   }, []);
 
-  if (loading) {
-    return <p className="text-[#9CA3AF]">Loading dashboard...</p>;
-  }
-
   return (
     <div className="space-y-9">
       <PageHeader
@@ -79,37 +76,50 @@ export default function AdminPage() {
         description="Manage products, plans, members, orders and enquiries."
       />
 
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
-        <StatCard
-          title="TOTAL MEMBERS"
-          value={String(stats.members)}
-          desc={`${stats.activeMembers} Active Members`}
-        />
-        <StatCard
-          title="TOTAL PRODUCTS"
-          value={String(stats.products)}
-          desc="Products in database"
-        />
-        <StatCard
-          title="TOTAL ORDERS"
-          value={String(stats.orders)}
-          desc="Orders received"
-        />
-        <StatCard
-          title="TOTAL REVENUE"
-          value={`₹${stats.revenue.toLocaleString()}`}
-          desc="Revenue from orders"
-        />
-      </div>
+      {loading ? (
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <StatCardSkeleton key={index} />
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+          <StatCard
+            title="Products"
+            value={String(stats.products)}
+            desc="Total products in shop"
+          />
 
-      <DashboardCharts
-        members={stats.members}
-        activeMembers={stats.activeMembers}
-        products={stats.products}
-        orders={stats.orders}
-        revenue={stats.revenue}
-        contacts={stats.contacts}
-      />
+          <StatCard
+            title="Members"
+            value={String(stats.members)}
+            desc="Total registered members"
+          />
+
+          <StatCard
+            title="Orders"
+            value={String(stats.orders)}
+            desc="Total product orders"
+          />
+
+          <StatCard
+            title="Revenue"
+            value={`₹${stats.revenue}`}
+            desc="Total revenue generated"
+          />
+        </div>
+      )}
+
+      {!loading && (
+        <DashboardCharts
+          members={stats.members}
+          activeMembers={stats.activeMembers}
+          products={stats.products}
+          orders={stats.orders}
+          revenue={stats.revenue}
+          contacts={stats.contacts}
+        />
+      )}
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
         {cards.map((card) => (

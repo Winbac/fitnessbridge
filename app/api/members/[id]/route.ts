@@ -122,6 +122,7 @@ export async function DELETE(
     return NextResponse.json({
       success: true,
       message: "Member deleted successfully",
+
     });
   } catch (error: any) {
     return NextResponse.json(
