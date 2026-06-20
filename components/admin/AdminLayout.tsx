@@ -1,21 +1,27 @@
 "use client";
 
-import type { ReactNode } from "react";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 
 export default function AdminLayout({
   children,
 }: {
-  children: ReactNode;
+  children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-[#0F172A] text-white">
+    <div className="min-h-screen bg-[var(--admin-bg)] text-[var(--admin-text)]">
+      {/* Sidebar */}
       <Sidebar />
 
-      <div className="min-h-screen lg:ml-[280px]">
+      {/* Main Content */}
+      <div className="lg:ml-[280px]">
+        {/* Top Navigation */}
         <Topbar />
-        <main className="p-5 md:p-8">{children}</main>
+
+        {/* Page Content */}
+        <main className="min-h-[calc(100vh-80px)] bg-[var(--admin-bg)] p-6">
+          {children}
+        </main>
       </div>
     </div>
   );

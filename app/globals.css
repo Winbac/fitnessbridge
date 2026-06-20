@@ -39,3 +39,20 @@ body {
 html {
   scroll-behavior: smooth;
 }
+:root[data-theme="dark"] {
+  --admin-bg: #0f172a;
+  --admin-card: #111827;
+  --admin-panel: #171923;
+  --admin-border: #1f2937;
+  --admin-text: #ffffff;
+  --admin-muted: #9ca3af;
+}
+
+:root[data-theme="light"] {
+  --admin-bg: #f8fafc;
+  --admin-card: #ffffff;
+  --admin-panel: #f1f5f9;
+  --admin-border: #e5e7eb;
+  --admin-text: #111827;
+  --admin-muted: #64748b;
+}

@@ -1,5 +1,8 @@
 "use client";
+import {
 
+  Legend,
+} from "recharts";
 import {
   Bar,
   BarChart,
@@ -44,65 +47,118 @@ export default function DashboardCharts({
   const revenueData = [
     { name: "Revenue", value: revenue },
     { name: "Orders", value: orders },
-    { name: "Products", value: products },
   ];
 
   return (
     <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-      <ChartCard title="Business Overview">
-        <BarChart data={overviewData}>
-          <XAxis dataKey="name" stroke="#9CA3AF" />
-          <YAxis stroke="#9CA3AF" />
-          <Tooltip />
-          <Bar dataKey="value" fill="#F97316" radius={[8, 8, 0, 0]} />
-        </BarChart>
-      </ChartCard>
+      {/* Business Overview */}
+      <div className="rounded-2xl border border-[var(--admin-border)] bg-[var(--admin-card)] p-6">
+        <h2 className="mb-6 text-xl font-bold text-[var(--admin-text)]">
+          Business Overview
+        </h2>
 
-      <ChartCard title="Member Status">
-        <PieChart>
-          <Pie
-            data={memberData}
-            dataKey="value"
-            nameKey="name"
-            innerRadius={70}
-            outerRadius={110}
-          >
-            <Cell fill="#22C55E" />
-            <Cell fill="#EF4444" />
-          </Pie>
-          <Tooltip />
-        </PieChart>
-      </ChartCard>
+        <div className="h-[300px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={overviewData}>
+              <XAxis
+                dataKey="name"
+                stroke="var(--admin-muted)"
+              />
 
-      <div className="xl:col-span-2">
-        <ChartCard title="Revenue Analytics">
-          <BarChart data={revenueData}>
-            <XAxis dataKey="name" stroke="#9CA3AF" />
-            <YAxis stroke="#9CA3AF" />
-            <Tooltip />
-            <Bar dataKey="value" fill="#F97316" radius={[8, 8, 0, 0]} />
-          </BarChart>
-        </ChartCard>
+              <YAxis
+                stroke="var(--admin-muted)"
+              />
+<Tooltip
+  cursor={{ fill: "rgba(249,115,22,0.08)" }}
+  contentStyle={{
+    background: "var(--admin-card)",
+    border: "1px solid var(--admin-border)",
+    borderRadius: "12px",
+    color: "var(--admin-text)",
+    boxShadow: "0 10px 25px rgba(0,0,0,.15)",
+  }}
+/>
+<Legend />
+              <Bar
+                dataKey="value"
+radius={[10,10,0,0]}
+                fill="#F97316"
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
-    </div>
-  );
-}
 
- function ChartCard({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactElement;
-}) {
-  return (
-    <div className="rounded-2xl border border-[#1F2937] bg-[#111827] p-6">
-      <h2 className="mb-6 text-xl font-bold text-white">{title}</h2>
+      {/* Member Status */}
+      <div className="rounded-2xl border border-[var(--admin-border)] bg-[var(--admin-card)] p-6">
+        <h2 className="mb-6 text-xl font-bold text-[var(--admin-text)]">
+          Member Status
+        </h2>
 
-      <div style={{ width: "100%", height: "320px" }}>
-        <ResponsiveContainer width="100%" height="100%">
-          {children}
-        </ResponsiveContainer>
+        <div className="h-[300px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+           <Pie
+  data={memberData}
+  dataKey="value"
+  nameKey="name"
+  innerRadius={75}
+  outerRadius={105}
+  paddingAngle={5}
+>
+                <Cell fill="#22C55E" />
+                <Cell fill="#EF4444" />
+              </Pie>
+
+              <Tooltip
+                contentStyle={{
+                  background: "var(--admin-card)",
+                  border: "1px solid var(--admin-border)",
+                  borderRadius: "12px",
+                  color: "var(--admin-text)",
+                }}
+              />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Revenue */}
+      <div className="rounded-2xl border border-[var(--admin-border)] bg-[var(--admin-card)] p-6 xl:col-span-2">
+        <h2 className="mb-6 text-xl font-bold text-[var(--admin-text)]">
+          Revenue Analytics
+        </h2>
+
+        <div className="h-[300px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={revenueData}>
+              <XAxis
+                dataKey="name"
+                stroke="var(--admin-muted)"
+              />
+
+              <YAxis
+                stroke="var(--admin-muted)"
+              />
+
+              <Tooltip
+                contentStyle={{
+                  background: "var(--admin-card)",
+                  border: "1px solid var(--admin-border)",
+                  borderRadius: "12px",
+                  color: "var(--admin-text)",
+                }}
+              />
+<Legend />
+              <Bar
+                dataKey="value"
+                radius={[8, 8, 0, 0]}
+                fill="#F97316"
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );

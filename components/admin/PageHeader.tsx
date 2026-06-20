@@ -7,8 +7,13 @@ export default function PageHeader({
 }) {
   return (
     <div>
-      <h1 className="text-3xl font-bold text-white">{title}</h1>
-      <p className="mt-2 text-[#9CA3AF]">{description}</p>
+      <h1 className="text-3xl font-bold text-[var(--admin-text)]">
+        {title}
+      </h1>
+
+      <p className="mt-2 text-[var(--admin-muted)]">
+        {description}
+      </p>
     </div>
   );
 }

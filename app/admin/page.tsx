@@ -126,10 +126,12 @@ export default function AdminPage() {
           <Link
             key={card.href}
             href={card.href}
-            className="rounded-2xl border border-[#1F2937] bg-[#111827] p-8 transition hover:border-[#F97316]"
+            className="rounded-2xl border border-[var(--admin-border)] bg-[var(--admin-card)] p-8 transition hover:border-[#F97316]"
           >
-            <h2 className="text-2xl font-bold text-white">{card.title}</h2>
-            <p className="mt-5 text-[#9CA3AF]">{card.desc}</p>
+            <h2 className="text-2xl font-bold text-[var(--admin-text)]">
+              {card.title}
+            </h2>
+            <p className="mt-5 text-[var(--admin-muted)]">{card.desc}</p>
           </Link>
         ))}
       </div>
