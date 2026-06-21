@@ -43,8 +43,15 @@ export default function ShopPage() {
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {products.map((product) => (
-            <ProductCard key={product.id} {...product} />
-          ))}
+<ProductCard
+  key={product.id}
+  name={product.name}
+  image={product.image}
+  price={product.price}
+  rating={product.rating}
+  description={product.description}
+  isNew={product.isNew}
+/>          ))}
         </div>
       </Container>
     </main>
