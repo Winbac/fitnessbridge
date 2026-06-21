@@ -44,7 +44,7 @@ export default function ProductCard({
         <p className="text-sm leading-relaxed text-[#9CA3AF]">{description}</p>
 
         <div className="mt-2 flex items-center justify-between">
-          <span className="text-lg font-bold text-[#F97316]">₹{price}</span>
+<span className="text-lg font-bold text-[#F97316]">{price}</span>
 
           <div className="flex items-center gap-1 text-[#FACC15]">
             <Star size={18} fill="currentColor" />
