@@ -51,7 +51,8 @@ export default function ShopPage() {
   rating={product.rating}
   description={product.description}
   isNew={product.isNew}
-/>          ))}
+/>
+          ))}
         </div>
       </Container>
     </main>
