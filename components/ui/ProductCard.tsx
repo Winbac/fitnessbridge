@@ -4,7 +4,7 @@ import { Star } from "lucide-react";
 type ProductCardProps = {
   name: string;
   image: string;
-price: number;
+price: string | number;
   rating: number;
   description: string;
   isNew: boolean;
@@ -31,7 +31,7 @@ export default function ProductCard({
       {/* Image Container */}
       <figure className="rounded-[20px] bg-[#1F2937] p-6">
         <Image
-          src="/Image/download-removebg-preview.png"
+src={image}
           alt={name}
           width={225}
           height={225}
@@ -50,7 +50,7 @@ export default function ProductCard({
 
         <div className="mt-2 flex items-center justify-between">
           <span className="text-lg font-bold text-[#F97316]">
-            {price}
+₹{price}
           </span>
 
           <div className="flex items-center gap-1 text-[#FACC15]">
