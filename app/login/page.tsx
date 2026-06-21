@@ -3,6 +3,7 @@
 import { ArrowRight, Dumbbell, Eye, Lock, Mail, Zap } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -82,12 +83,21 @@ async function handleSubmit(e: React.FormEvent) {
               </p>
 
               <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <button className="rounded-xl border border-[#1F2937] bg-[#171923] px-6 py-4 font-semibold text-white">
-                  Google
-                </button>
-                <button className="rounded-xl border border-[#1F2937] bg-[#171923] px-6 py-4 font-semibold text-white">
-                  Facebook
-                </button>
+            <button
+  type="button"
+  onClick={() => signIn("google", { callbackUrl: "/admin" })}
+  className="rounded-xl border border-[#1F2937] bg-[#171923] px-6 py-4 font-semibold text-white"
+>
+  Google
+</button>
+
+<button
+  type="button"
+  onClick={() => signIn("facebook", { callbackUrl: "/admin" })}
+  className="rounded-xl border border-[#1F2937] bg-[#171923] px-6 py-4 font-semibold text-white"
+>
+  Facebook
+</button>
               </div>
 
               <div className="my-8 flex items-center gap-4 text-[#9CA3AF]">
