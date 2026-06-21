@@ -1,12 +1,19 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Member from "@/models/Member";
-import { verifyAdmin } from "@/lib/auth";
+import { verifyAdmin, requireRole } from "@/lib/auth";
 
 function unauthorized() {
   return NextResponse.json(
     { success: false, message: "Unauthorized" },
     { status: 401 }
+  );
+}
+
+function forbidden() {
+  return NextResponse.json(
+    { success: false, message: "Forbidden" },
+    { status: 403 }
   );
 }
 
@@ -42,10 +49,10 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const admin = await verifyAdmin();
+    const admin = await requireRole(["ADMIN", "MANAGER"]);
 
     if (!admin) {
-      return unauthorized();
+      return forbidden();
     }
 
     await connectDB();

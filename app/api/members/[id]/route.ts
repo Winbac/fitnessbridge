@@ -1,12 +1,19 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Member from "@/models/Member";
-import { verifyAdmin } from "@/lib/auth";
+import { verifyAdmin, requireRole } from "@/lib/auth";
 
 function unauthorized() {
   return NextResponse.json(
     { success: false, message: "Unauthorized" },
     { status: 401 }
+  );
+}
+
+function forbidden() {
+  return NextResponse.json(
+    { success: false, message: "Forbidden" },
+    { status: 403 }
   );
 }
 
@@ -55,10 +62,10 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const admin = await verifyAdmin();
+    const admin = await requireRole(["ADMIN", "MANAGER"]);
 
     if (!admin) {
-      return unauthorized();
+      return forbidden();
     }
 
     await connectDB();
@@ -100,10 +107,10 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const admin = await verifyAdmin();
+    const admin = await requireRole(["ADMIN"]);
 
     if (!admin) {
-      return unauthorized();
+      return forbidden();
     }
 
     await connectDB();
@@ -122,7 +129,6 @@ export async function DELETE(
     return NextResponse.json({
       success: true,
       message: "Member deleted successfully",
-
     });
   } catch (error: any) {
     return NextResponse.json(

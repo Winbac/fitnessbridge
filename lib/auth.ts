@@ -21,3 +21,16 @@ export async function verifyAdmin() {
     return null;
   }
 }
+export async function requireRole(allowedRoles: string[]) {
+  const admin: any = await verifyAdmin();
+
+  if (!admin) {
+    return null;
+  }
+
+  if (!allowedRoles.includes(admin.role)) {
+    return null;
+  }
+
+  return admin;
+}

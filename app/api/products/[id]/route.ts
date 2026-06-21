@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Product from "@/models/Product";
-import { verifyAdmin } from "@/lib/auth";
+import { verifyAdmin, requireRole } from "@/lib/auth";
 
 function unauthorized() {
   return NextResponse.json(
@@ -11,6 +11,18 @@ function unauthorized() {
     },
     {
       status: 401,
+    }
+  );
+}
+
+function forbidden() {
+  return NextResponse.json(
+    {
+      success: false,
+      message: "Forbidden",
+    },
+    {
+      status: 403,
     }
   );
 }
@@ -34,7 +46,10 @@ export async function GET(
 
     if (!product) {
       return NextResponse.json(
-        { success: false, message: "Product not found" },
+        {
+          success: false,
+          message: "Product not found",
+        },
         { status: 404 }
       );
     }
@@ -60,10 +75,10 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const admin = await verifyAdmin();
+    const admin = await requireRole(["ADMIN", "MANAGER"]);
 
     if (!admin) {
-      return unauthorized();
+      return forbidden();
     }
 
     await connectDB();
@@ -82,7 +97,10 @@ export async function PUT(
 
     if (!product) {
       return NextResponse.json(
-        { success: false, message: "Product not found" },
+        {
+          success: false,
+          message: "Product not found",
+        },
         { status: 404 }
       );
     }
@@ -109,10 +127,10 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const admin = await verifyAdmin();
+    const admin = await requireRole(["ADMIN"]);
 
     if (!admin) {
-      return unauthorized();
+      return forbidden();
     }
 
     await connectDB();
@@ -134,7 +152,6 @@ export async function DELETE(
     return NextResponse.json({
       success: true,
       message: "Product deleted successfully",
-      data: product,
     });
   } catch (error: any) {
     return NextResponse.json(

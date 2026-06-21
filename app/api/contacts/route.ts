@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Contact from "@/models/Contact";
-import { verifyAdmin } from "@/lib/auth";
+import { verifyAdmin, requireRole } from "@/lib/auth";
 
 function unauthorized() {
   return NextResponse.json(
@@ -47,11 +47,19 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const admin = await verifyAdmin();
+   const admin = await requireRole(["ADMIN", "MANAGER"]);
 
-    if (!admin) {
-      return unauthorized();
+if (!admin) {
+  return NextResponse.json(
+    {
+      success: false,
+      message: "Forbidden",
+    },
+    {
+      status: 403,
     }
+  );
+}
 
     await connectDB();
 
