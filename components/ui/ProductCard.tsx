@@ -4,8 +4,8 @@ import { Star } from "lucide-react";
 type ProductCardProps = {
   name: string;
   image: string;
-  price: string;
-  rating: string;
+price: number;
+  rating: number;
   description: string;
   isNew: boolean;
 };

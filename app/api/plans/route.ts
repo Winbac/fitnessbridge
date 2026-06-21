@@ -12,12 +12,6 @@ function unauthorized() {
 
 export async function GET() {
   try {
-    const admin = await verifyAdmin();
-
-    if (!admin) {
-      return unauthorized();
-    }
-
     await connectDB();
 
     const plans = await Plan.find().sort({ createdAt: -1 });
@@ -37,7 +31,6 @@ export async function GET() {
     );
   }
 }
-
 export async function POST(request: Request) {
   try {
     const admin = await verifyAdmin();

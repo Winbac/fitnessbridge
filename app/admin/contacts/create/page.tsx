@@ -4,8 +4,11 @@ import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
+
 
 export default function CreateContactPage() {
+
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -46,6 +49,8 @@ export default function CreateContactPage() {
     setLoading(false);
 
     if (data.success) {
+        toast.success("Product created successfully!");
+
       router.push("/admin/contacts");
       router.refresh();
     } else {

@@ -7,11 +7,11 @@ export default function SettingsPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-4xl font-bold text-white">
+        <h1 className="text-4xl font-bold text-[var(--admin-text)]">
           Settings
         </h1>
 
-        <p className="mt-2 text-[#9CA3AF]">
+        <p className="mt-2 text-[var(--admin-muted)]">
           Manage your platform preferences and account settings.
         </p>
       </div>

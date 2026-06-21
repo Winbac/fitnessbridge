@@ -1,50 +1,70 @@
+"use client";
+
+import { Globe, Shield, Database } from "lucide-react";
+
 export default function SettingsPlatform() {
   return (
-    <div className="rounded-2xl border border-[#1F2937] bg-[#111827] p-6">
-      <h2 className="mb-6 text-xl font-semibold text-white">
+    <div className="rounded-2xl border border-[var(--admin-border)] bg-[var(--admin-card)] p-6">
+      <h2 className="mb-6 text-xl font-semibold text-[var(--admin-text)]">
         Platform Settings
       </h2>
 
-      <div className="space-y-4">
-        <input
-          defaultValue="The Fitness Bridge"
-          className="w-full rounded-xl bg-[#1F2937] p-4 text-white outline-none"
+      <div className="space-y-5">
+        <SettingRow
+          icon={<Globe size={20} />}
+          title="Website Status"
+          value="Online"
+          color="text-emerald-400"
         />
 
-        <input
-          placeholder="Contact Email"
-          className="w-full rounded-xl bg-[#1F2937] p-4 text-white outline-none"
+        <SettingRow
+          icon={<Shield size={20} />}
+          title="Security"
+          value="Protected"
+          color="text-blue-400"
         />
 
-        <input
-          placeholder="Phone Number"
-          className="w-full rounded-xl bg-[#1F2937] p-4 text-white outline-none"
+        <SettingRow
+          icon={<Database size={20} />}
+          title="Database"
+          value="Connected"
+          color="text-[#F97316]"
         />
+      </div>
+    </div>
+  );
+}
 
-        <textarea
-          rows={3}
-          placeholder="Gym Address"
-          className="w-full rounded-xl bg-[#1F2937] p-4 text-white outline-none"
-        />
+function SettingRow({
+  icon,
+  title,
+  value,
+  color,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  value: string;
+  color: string;
+}) {
+  return (
+    <div className="flex items-center justify-between rounded-xl bg-[var(--admin-panel)] p-4">
+      <div className="flex items-center gap-3">
+        <div className="text-[var(--admin-muted)]">{icon}</div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <select className="rounded-xl bg-[#1F2937] p-4 text-white">
-            <option>INR (₹)</option>
-            <option>USD ($)</option>
-          </select>
+        <div>
+          <h3 className="font-semibold text-[var(--admin-text)]">
+            {title}
+          </h3>
 
-          <select className="rounded-xl bg-[#1F2937] p-4 text-white">
-            <option>Asia/Kolkata (IST)</option>
-            <option>UTC</option>
-          </select>
-        </div>
-
-        <div className="flex justify-end">
-          <button className="rounded-xl bg-[#F97316] px-6 py-3 text-white">
-            Save
-          </button>
+          <p className="text-sm text-[var(--admin-muted)]">
+            System Configuration
+          </p>
         </div>
       </div>
+
+      <span className={`font-semibold ${color}`}>
+        {value}
+      </span>
     </div>
   );
 }
