@@ -1,3 +1,14 @@
+type products = {
+  id: number;
+  name: string;
+  price: string;
+  rating: string;
+  description: string;
+  image: string;
+  isNew: boolean;
+  category?: string;
+};
+
 export const products = [
   {
     id: 1,

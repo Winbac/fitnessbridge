@@ -12,15 +12,15 @@ export default function CreateProductPage() {
   const [uploading, setUploading] = useState(false);
   const [image, setImage] = useState("");
 
-  const [formData, setFormData] = useState({
-    name: "",
-    category: "",
-    price: "",
-    stock: "",
-    sales: "0",
-    description: "",
-    rating: "5",
-    isNew: false,
+const [formData, setFormData] = useState({
+  name: "",
+  category: "",
+  price: "",
+  stock: "",
+  sales: "0",
+  description: "",
+  rating: "5",
+  isNewProduct: false,
   });
 
   function handleChange(
@@ -35,10 +35,11 @@ export default function CreateProductPage() {
   }
 
   function handleCheckbox(e: ChangeEvent<HTMLInputElement>) {
-    setFormData((prev) => ({
-      ...prev,
-      isNew: e.target.checked,
-    }));
+setFormData((prev) => ({
+  ...prev,
+  isNewProduct: e.target.checked,
+}));
+
   }
 
   async function uploadImage(file: File) {
@@ -55,9 +56,11 @@ export default function CreateProductPage() {
 
       const data = await res.json();
 
-      if (data.success) {
-        setImage(data.url);
-      } else {
+if (data.success) {
+  setImage(data.imageUrl);
+}
+
+else {
         alert(data.message || "Image upload failed");
       }
     } catch (error) {
@@ -231,7 +234,7 @@ export default function CreateProductPage() {
           <label className="flex items-center gap-3 text-[#D1D5DB]">
             <input
               type="checkbox"
-              checked={formData.isNew}
+              checked={formData.isNewProduct}
               onChange={handleCheckbox}
               className="h-4 w-4"
             />

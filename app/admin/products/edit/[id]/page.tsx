@@ -96,7 +96,7 @@ export default function EditProductPage() {
       if (data.success) {
         setFormData((prev) => ({
           ...prev,
-          image: data.url,
+image: data.imageUrl,
         }));
       } else {
         alert(data.message || "Image upload failed");
